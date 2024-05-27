@@ -4,24 +4,18 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template("form.html")
-#Admin
-@app.route('/admin')
-def Hello_Admin():
-    return f"<p>Hello,  Admin!</p>"
+@app.route('/welcome/<name>')
+def Welcome(name):
+    return f"<p>Hello,welcome  {name} </p>"
 
-#guest
-@app.route('/guest/<guest>')
-def Hello_guest(guest):
-    return f"<p>Hello,  {guest} As a guest</p>"
-
-#user
-@app.route('/hello/<name>')
-def hello_User(name):
-    if name == 'admin':
-        return redirect(url_for('Hello_Admin'))
+@app.route('/login',methods = ['POST','GET'])
+def login():
+    if request.method == "POST":
+        user = request.form['uname']
+        return redirect(url_for('Welcome',name = user))
     else:
-        return redirect(url_for('Hello_guest', guest = name))
-
+        user = request.args.get("uname")
+        return redirect(url_for('Welcome',name = user))
 
 if __name__ == '__main__':
     app.run(debug=True)
